@@ -1,4 +1,4 @@
-name: Website Deployment
+name: Reusable-workflow
 on:
   push:
     branches:
@@ -70,6 +70,8 @@ jobs:
   deploy:
     needs: build
     uses: ./.github/workflows/reusable-workflow.yml
+    with: 
+      artifact-name-input: "dist-files"
   report:
     needs: [lint, deploy]
     if: failure()
