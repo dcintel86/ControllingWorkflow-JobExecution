@@ -1,14 +1,21 @@
 name: Reusable-Workflow
 on: 
     workflow_call:
-        inputs:
-            artifact-name-input:
-                description: The name of the deployable artifact files
-                required: true
-                default: dist
-                type: string
+      inputs:
+        artifact-name-input:
+          description: The name of the deployable artifact files
+          required: true
+          default: dist
+          type: string
+      outputs:
+        result:
+          description: The result of the deployment operation
+          value: ${{ jobs.deploy.outputs.outcome }}
+
 jobs:
     deploy:
+        outputs:
+          outcome: ${{ steps.set-result-id.outputs.step-result }}
         runs-on: ubuntu-latest
         steps:
             - name: Get code
@@ -19,3 +26,6 @@ jobs:
               run: ls -lrt
             - name: Output information
               run: echo "Deploying and uploading"
+            - name: Set result output
+              id: set-result-id
+              run: echo "step-result=Okla" >> $GITHUB_OUTPUT
